@@ -3,7 +3,7 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { getHeaders } from "../../utils/utils";
 import { Link } from "react-router-dom";
-import { useCart  } from "../../context/CartContext";
+import { useCart } from "../../context/CartContext";
 
 const Cart = () => {
   console.log("CART COMPONENT RENDERED");
@@ -31,25 +31,28 @@ const Cart = () => {
 
       if (data.isSuccess) {
         setCartData(data);
-        setCartCount(data.itemCount); 
+        setCartCount(data.itemCount);
       }
     } catch (err) {
       console.log("GET CART ERROR:", err);
     }
   };
- 
+
   useEffect(() => {
     console.log("items:", cartData.data.items);
     cartData.data.items.map((item) => {
-      console.log("item name:", item.productId.name);
+      if (item.productId) {
+        console.log("item name:", item.productId.name);
+      }
     });
   }, [cartData]);
 
   // ✅ UPDATE QTY 
   const updateQty = async (index, type) => {
     const item = cartData.data.items[index];
-    let qty = item.quantity;
+    if (!item.productId) return;
 
+    let qty = item.quantity;
     if (type === "inc") qty++;
     if (type === "dec" && qty > 1) qty--;
 
@@ -78,8 +81,8 @@ const Cart = () => {
 
       if (data.isSuccess) {
         setCartData(data);
-        setCartCount(data.itemCount); 
-      loadCart();
+        setCartCount(data.itemCount);
+        loadCart();
       }
     } catch (err) {
       console.log("UPDATE CART ERROR:", err);
@@ -131,53 +134,56 @@ const Cart = () => {
       <div className="grid md:grid-cols-3 gap-10">
         {/* LEFT */}
         <div className="md:col-span-2 space-y-6">
-          {cartData.data.items.map((item, index) => (
-            <div key={index} className="border-b pb-6 flex gap-5">
-              <Link to={`/product/${item.productId._id}`}>
-                <img
-                  src={item.productId.image}
-                  className="w-28 h-28 object-cover rounded-lg cursor-pointer"
-                />
-              </Link>
+          {cartData.data.items.map((item, index) => {
+            if (!item.productId) return null;
 
-              <div className="flex-1">
+            return (
+              <div key={index} className="border-b pb-6 flex gap-5">
                 <Link to={`/product/${item.productId._id}`}>
-                  <h2 className="font-bold text-lg hover:text-primary cursor-pointer">
-                    {item.productId.name}
-                  </h2>
+                  <img
+                    src={item.productId.image}
+                    className="w-28 h-28 object-cover rounded-lg cursor-pointer"
+                  />
                 </Link>
-                <p className="font-semibold text-primary text-lg mt-2">
-                  ₹{item.productId.price}
-                </p>
-              </div>
 
-              <div className="flex flex-col items-center gap-2">
-                {/* ✅ BUTTONS FIXED */}
-                <div className="flex items-center border rounded-full px-3 py-1 gap-3">
-                  <button onClick={() => updateQty(index, "dec")}>
-                    <FaMinus className="text-sm" />
-                  </button>
-
-                  <span className="font-medium">{item.quantity}</span>
-
-                  <button onClick={() => updateQty(index, "inc")}>
-                    <FaPlus className="text-sm" />
-                  </button>
+                <div className="flex-1">
+                  <Link to={`/product/${item.productId._id}`}>
+                    <h2 className="font-bold text-lg hover:text-primary cursor-pointer">
+                      {item.productId.name}
+                    </h2>
+                  </Link>
+                  <p className="font-semibold text-primary text-lg mt-2">
+                    ₹{item.productId.price}
+                  </p>
                 </div>
 
-                <button
-                  onClick={() => removeItem(index)}
-                  className="text-red-500 text-xl hover:text-red-700"
-                >
-                  <IoClose />
-                </button>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="flex items-center border rounded-full px-3 py-1 gap-3">
+                    <button onClick={() => updateQty(index, "dec")}>
+                      <FaMinus className="text-sm" />
+                    </button>
 
-                <p className="font-semibold mt-1">
-                  ₹{item.productId.price * item.quantity}
-                </p>
+                    <span className="font-medium">{item.quantity}</span>
+
+                    <button onClick={() => updateQty(index, "inc")}>
+                      <FaPlus className="text-sm" />
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={() => removeItem(index)}
+                    className="text-red-500 text-xl hover:text-red-700"
+                  >
+                    <IoClose />
+                  </button>
+
+                  <p className="font-semibold mt-1">
+                    ₹{item.productId.price * item.quantity}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* RIGHT */}
@@ -190,11 +196,7 @@ const Cart = () => {
           </div>
 
           <button className="w-full bg-primary text-white mt-5 py-2 rounded-md hover:opacity-90">
-            <Link 
-            to="/checkout"
-            >
-            Check out
-            </Link>
+            <Link to="/checkout">Check out</Link>
           </button>
         </div>
       </div>
