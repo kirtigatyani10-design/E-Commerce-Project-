@@ -1,8 +1,24 @@
-# React + Vite
+
 # Shopsy – Full Stack E-Commerce Website 🛒
 
 Shopsy is a modern full-stack e-commerce web application built using React and Node.js, React, Tailwind CSS, Node.js, Express, and MongoDB.  
 The project includes complete user shopping flow from product browsing to checkout with authentication and protected routes. The project replicates real-world online shopping experiences with authentication, cart management, checkout flow, and user profiles.
+
+## 📸 Screenshots
+
+### 🏠 Home Page
+![Home Page](screenshots/home.png)
+
+### 🛍️ Products Page
+![Products Page](screenshots/products.png)
+
+### 🛒 Cart Page
+![Cart Page](screenshots/carts.png)
+
+### 💳 Checkout Page
+![Checkout Page](screenshots/checkout.png)
+
+---
 
 ## 📂 Project Structure
 - components/ – UI components
