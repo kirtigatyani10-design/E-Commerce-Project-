@@ -27,7 +27,11 @@ const OAuthSuccess = () => {
 
       // Save auth data
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("user",
+        JSON.stringify({
+          data: user
+        })
+      );
 
       // Notify app (Navbar, contexts, etc.)
       window.dispatchEvent(new Event("auth-change"));

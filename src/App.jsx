@@ -12,6 +12,7 @@ import Testimonials from "./components/Testimonials/Testimonials";
 import Footer from "./components/Footer/Footer";
 import ProductsPage from "./components/Products/ProductsPage";
 import SingleProduct from "./components/Products/SingleProduct";
+import OrderReceipt from "./components/Order/OrderReceipt";
 
 import OrderPopup from "./components/Popup/Popup";
 import LoginPopup from "./components/Popup/LoginPopup";
@@ -31,6 +32,7 @@ import CategoryProducts from "./components/Categories/CategoryProducts";
 import ErrorPage from "./components/ErrorPage/ErrorPage";
 import OAuthSuccess from "./components/Popup/authsuccess";
 import Login from "./components/Login/Login";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 function initGuestCartId() {
   let token = localStorage.getItem("token");
@@ -165,9 +167,12 @@ const App = () => {
             <Route path="/categories" element={<Categories />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/orders" element={<Order />} />
+            <Route path="/order-receipt/:orderId" element={<OrderReceipt />} />
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/categories/:slug" element={<CategoryProducts />} />
             <Route path="/oauth-success" element={<OAuthSuccess />} />
+            <Route path="/terms" element={<TermsAndConditions />} />
+            <Route path="/order-receipt" element={<OrderReceipt />} />
             <Route path="/login" element={<LoginPopup
             loginPopup={LoginPopupState}
             setLoginPopup={setLoginPopupState}

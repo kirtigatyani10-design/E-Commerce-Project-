@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getHeaders } from "../../utils/utils";
 import { FiLogOut } from "react-icons/fi";
+import MyOrders from "../Order/Order";
 
 const Account = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -36,15 +37,18 @@ const Account = () => {
       return;
     }
 
-    if (stored?.data) {
-      setUser(stored.data);
-      setFormData({
-        firstName: stored.data.firstName || "",
-        lastName: stored.data.lastName || "",
-        email: stored.data.email || "",
-        phone: stored.data.phone || "",
-      });
-    }
+    // handle both cases
+    const userData = stored?.data || stored;
+
+    if (!userData) return;
+
+    setUser(userData);
+    setFormData({
+      firstName: userData.firstName || "",
+      lastName: userData.lastName || "",
+      email: userData.email || "",
+      phone: userData.phone || "",
+    });
   }, []);
 
   // UPDATE PROFILE 
@@ -67,7 +71,7 @@ const Account = () => {
     }
     try {
       const stored = JSON.parse(localStorage.getItem("user"));
-      const customerId = stored?.data?._id;
+      const customerId = stored?.data?._id || stored?._id;
 
       if (!customerId) {
         alert("Customer ID not found");
@@ -129,7 +133,7 @@ const Account = () => {
     }
     try {
       const stored = JSON.parse(localStorage.getItem("user"));
-      const customerId = stored?.data?._id;
+      const customerId = stored?.data?._id || stored?._id;
 
       if (!customerId) {
         alert("Customer ID not found");
@@ -276,11 +280,7 @@ const Account = () => {
           {activeTab === "orders" && (
             <>
               <h3 className="text-2xl font-bold mb-6">My Orders</h3>
-              <div className="border rounded-lg p-4">
-                <p className="text-gray-600">
-                  No orders found
-                </p>
-              </div>
+              <MyOrders />
             </>
           )}
 
